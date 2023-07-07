@@ -63,7 +63,6 @@ int main()
     }
   }
 
-  free(cube);
   SDL_DestroyRenderer(r);
   SDL_DestroyWindow(w);
 
@@ -82,7 +81,6 @@ void render_carpet(int steps)
 
   if (steps > MAX_STEPS) {
     SDL_RenderFillRect(r, cube);
-    free(cube);
   } else {
     fill_tile(0, 0, WINDOW_W, WINDOW_H);
     // printf("WINDOW SIZE: %dx%d\n", WINDOW_W, WINDOW_H);
@@ -105,6 +103,7 @@ void render_carpet(int steps)
     }
   }
 
+  free(cube);
   SDL_RenderPresent(r);
 }
 
