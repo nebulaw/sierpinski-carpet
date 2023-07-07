@@ -6,7 +6,7 @@
 // WINDOW_W is preferable to set to the powers of 3: 1, 9, 27, 81, 243, 729, 2187
 // In this way you will get precise drawing, the screen gets fully painted after
 // input steps greater than 'MAX_STEPS'. Change it to produce the desired result.
-// REMEMBER on 8 steps, the program has to draw 5380839 cubes, not so efficient,
+// REMEMBER on 8 steps, the program has to draw 5 380 839 cubes, not so efficient,
 // it just an educational demonstration.
 #define WINDOW_W 729
 #define WINDOW_H WINDOW_W
@@ -19,56 +19,29 @@ SDL_Renderer *r;
 SDL_Event e;
 SDL_Rect *cube;
 
-void render_carpet(int step);
-void fill_tile(int x1, int y1, int x2, int y2);
-void render_tile(int x1, int y1, int x2, int y2);
-
-SDL_Rect *create_cube(int x, int y, int w, int h);
-
-int main()
+SDL_Rect *create_cube(int x, int y, int w, int h)
 {
-  int steps;
-  printf("Enter steps = ");
-  scanf("%d", &steps);
-
-  if(SDL_Init(SDL_INIT_VIDEO) != 0) {
-    printf("INIT ERROR: %s\n", SDL_GetError());
-    return EXIT_FAILURE;
-  }
-
-  w = SDL_CreateWindow(
-    "Sierpinski Carpet",
-    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-    WINDOW_W, WINDOW_H,
-    WINDOW_FLAGS
-  );
-
-  r = SDL_CreateRenderer( w, -1, RENDER_FLAGS);
-
-  // Main Part
-  SDL_SetRenderDrawColor(r, 5, 32, 74, 255);
-  SDL_Rect *bg = create_cube(0, 0, WINDOW_W, WINDOW_H);
-  SDL_RenderFillRect(r, bg);
-  render_carpet(steps);
-
-  while (1) {
-    while (SDL_PollEvent(&e)) {
-      switch (e.type) {
-        case SDL_QUIT:
-          SDL_DestroyRenderer(r);
-          SDL_DestroyWindow(w);
-          return EXIT_SUCCESS;
-        default: {}
-      }
-    }
-  }
-
-  SDL_DestroyRenderer(r);
-  SDL_DestroyWindow(w);
-
-  return EXIT_SUCCESS;
+  SDL_Rect *cube = (SDL_Rect *)malloc(sizeof(SDL_Rect));
+  cube->x = x;
+  cube->y = y;
+  cube->w = w;
+  cube->h = h;
+  return cube;
 }
 
+// Draws cube inside the tile
+void fill_tile(int x1, int y1, int x2, int y2)
+{
+  double w = ceil((x2 - x1) / 3);
+  double h = ceil((y2 - y1) / 3);
+  cube->x = x1 + (int)w;
+  cube->y = y1 + (int)h;
+  cube->w = (int)w;
+  cube->h = (int)h;
+  SDL_RenderFillRect(r, cube);
+}
+
+// Render a whole carpet
 void render_carpet(int steps)
 {
   if (steps <= 0) {
@@ -107,29 +80,50 @@ void render_carpet(int steps)
   SDL_RenderPresent(r);
 }
 
-// Draws cube inside the tile
-void fill_tile(int x1, int y1, int x2, int y2)
+int main()
 {
-  double w = ceil((x2 - x1) / 3);
-  double h = ceil((y2 - y1) / 3);
-  cube->x = x1 + (int)w;
-  cube->y = y1 + (int)h;
-  cube->w = (int)w;
-  cube->h = (int)h;
-  SDL_RenderFillRect(r, cube);
+  // Asking for input
+  int steps;
+  printf("Enter steps = ");
+  scanf("%d", &steps);
+
+  // Initialization
+  if(SDL_Init(SDL_INIT_VIDEO) != 0) {
+    printf("INIT ERROR: %s\n", SDL_GetError());
+    return EXIT_FAILURE;
+  }
+
+  w = SDL_CreateWindow(
+    "Sierpinski Carpet",
+    SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    WINDOW_W, WINDOW_H,
+    WINDOW_FLAGS
+  );
+
+  r = SDL_CreateRenderer( w, -1, RENDER_FLAGS);
+
+  // Rendering Carpet
+  SDL_SetRenderDrawColor(r, 5, 32, 74, 255);
+  SDL_Rect *bg = create_cube(0, 0, WINDOW_W, WINDOW_H);
+  SDL_RenderFillRect(r, bg);
+  render_carpet(steps);
+
+  while (1) {
+    while (SDL_PollEvent(&e)) {
+      switch (e.type) {
+        case SDL_QUIT:
+          SDL_DestroyRenderer(r);
+          SDL_DestroyWindow(w);
+          return EXIT_SUCCESS;
+        default: {}
+      }
+    }
+  }
+
+  SDL_DestroyRenderer(r);
+  SDL_DestroyWindow(w);
+
+  return EXIT_SUCCESS;
 }
-
-SDL_Rect *create_cube(int x, int y, int w, int h)
-{
-  SDL_Rect *cube = (SDL_Rect *)malloc(sizeof(SDL_Rect));
-  cube->x = x;
-  cube->y = y;
-  cube->w = w;
-  cube->h = h;
-  return cube;
-}
-
-
-
 
 
