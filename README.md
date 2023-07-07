@@ -4,11 +4,11 @@ Simple Implementation in C. It is created for educational purposes only, It is n
 
 ![Sierpinski Carpet](image.png)
 
-### How to Run?
+## Requirements
+* [CMake](https://cmake.org/install/)
+* [SDL2](https://wiki.libsdl.org/SDL2/Installation)
 
-You must have **<a href="https://wiki.libsdl.org/SDL2/Installation" target="_blank">SDL2</a>** installed.
-
-Then, you can execute:
+## Run
 ```sh
 git clone https://github.com/nebulaw/sierpinski-carpet
 cd sierpinski-carpet
