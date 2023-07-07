@@ -1,6 +1,6 @@
 # Sierpinski Carpet
 
-Simple Implementation in C. It is created for educational purposes only, It is not efficiently written.
+Simple Implementation in C. It is created for educational purposes only, It is not so efficiently written.
 
 ![Sierpinski Carpet](image.png)
 
